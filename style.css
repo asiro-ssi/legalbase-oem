@@ -240,6 +240,32 @@ details.qa-item[open] .q-arrow {
   margin-top: 8px;
 }
 
+/* ---- ローディング / エラー ---- */
+.loading {
+  padding: 40px 28px;
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.error-box {
+  margin: 24px 28px;
+  padding: 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.error-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 6px;
+}
+
+.error-msg {
+  font-size: 0.8125rem;
+  color: #b91c1c;
+}
+
 /* ---- レスポンシブ ---- */
 @media (max-width: 640px) {
   .main {
