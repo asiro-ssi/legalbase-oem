@@ -14,6 +14,8 @@ export default function LegiewFormsTable({ records }: { records: Record<string, 
   const publishedRecords = records.filter((r) => {
     const val = (r["代理店ページ公開"] as { value?: string } | undefined)?.value;
     if (!val || val.toLowerCase().trim() !== "on") return false;
+    const legiewOnly = (r["LEGIEWのみ"] as { value?: string } | undefined)?.value;
+    if (!legiewOnly || legiewOnly.toLowerCase().trim() !== "on") return false;
     const title = (r.Title as { value?: string } | undefined)?.value ?? "";
     return isLegiewRecordVisible(title);
   });
