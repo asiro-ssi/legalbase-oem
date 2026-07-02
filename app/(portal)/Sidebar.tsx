@@ -4,9 +4,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const NAV_ITEMS = [
+  { href: "/faq", label: "問答集" },
   { href: "/forms", label: "帳票一覧" },
   { href: "/links", label: "リンク一覧" },
-  { href: "/faq", label: "問答集" },
 ];
 
 export default function Sidebar() {

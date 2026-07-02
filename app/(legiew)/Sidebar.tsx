@@ -4,9 +4,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const NAV_ITEMS = [
+  { href: "/legiew/faq", label: "問答集" },
   { href: "/legiew/forms", label: "帳票一覧" },
   { href: "/legiew/links", label: "リンク一覧" },
-  { href: "/legiew/faq", label: "問答集" },
 ];
 
 export default function LegiewSidebar() {
