@@ -1,0 +1,1648 @@
+/* app/assets/stylesheets/mypage.css
+   ==========================================
+   弁護士費用保険 マイページ デザインシステム
+   ========================================== */
+
+/* ── カラー変数 ── */
+:root {
+  --mp-bg:       #F5F5F5;
+  --mp-surface:  #FFFFFF;
+  --mp-border:   #E7E7E7;
+  --mp-border2:  #D9D9D9;
+  --mp-text:     #525252;
+  --mp-text-sub: #888888;
+  --mp-text-hint:#ABABAB;
+  --mp-accent:   #E15959;
+  --mp-accent-l: #FAE9E9;
+  --mp-accent-d: #C03E3E;
+  --mp-sidebar-w: 220px;
+  --mp-header-h:  58px;
+  --mp-radius:    10px;
+  --mp-radius-lg: 14px;
+}
+
+/* ── ベースリセット（マイページスコープ） ── */
+.mp-layout * {
+  box-sizing: border-box;
+}
+
+/* ── レイアウト ── */
+.mp-layout {
+  display: grid;
+  grid-template-columns: var(--mp-sidebar-w) 1fr;
+  min-height: calc(100vh - var(--mp-header-h));
+  background: var(--mp-bg);
+  font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+  color: var(--mp-text);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── サイドバー ── */
+.mp-sidebar {
+  background: var(--mp-surface);
+  border-right: 1px solid var(--mp-border);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: var(--mp-header-h);
+  height: calc(100vh - var(--mp-header-h));
+  overflow-y: auto;
+}
+
+.mp-sidebar-section {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--mp-text-hint);
+  padding: 10px 12px 5px;
+}
+
+.mp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  border-radius: var(--mp-radius);
+  font-size: 13px;
+  color: var(--mp-text-sub);
+  text-decoration: none;
+  transition: all .15s;
+  position: relative;
+}
+.mp-nav-item:hover {
+  background: var(--mp-bg);
+  color: var(--mp-text);
+}
+.mp-nav-item.active {
+  background: var(--mp-accent-l);
+  color: var(--mp-accent-d);
+  font-weight: 500;
+}
+.mp-nav-item.active .mp-nav-ic { color: var(--mp-accent); opacity: 1; }
+
+.mp-nav-ic {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: .55;
+}
+.mp-nav-item:hover .mp-nav-ic { opacity: 1; }
+
+.mp-nav-badge {
+  margin-left: auto;
+  background: var(--mp-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.mp-sidebar-spacer { flex: 1; }
+.mp-sidebar-divider { height: 1px; background: var(--mp-border); margin: 10px 0; }
+
+.mp-nav-foot {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border-radius: var(--mp-radius);
+  font-size: 12px;
+  color: var(--mp-text-hint);
+  text-decoration: none;
+  transition: background .15s;
+}
+.mp-nav-foot:hover { background: var(--mp-bg); color: var(--mp-text-sub); }
+
+/* ── メインコンテンツ ── */
+.mp-main {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ── ページヘッド ── */
+.mp-page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.mp-page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--mp-text);
+  letter-spacing: -.02em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.mp-page-sub {
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  margin-top: 4px;
+}
+
+/* ── アラートバー ── */
+.mp-alert {
+  background: var(--mp-accent-l);
+  border: 1px solid #f0c0c0;
+  border-radius: var(--mp-radius);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mp-alert-ic {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--mp-accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mp-alert-text {
+  font-size: 13px;
+  color: #8a2020;
+  flex: 1;
+}
+.mp-alert-text strong { font-weight: 600; }
+.mp-alert-btn {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mp-accent-d);
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── メトリクス ── */
+.mp-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.mp-metric {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  padding: 18px 20px;
+}
+.mp-metric-label {
+  font-size: 11px;
+  color: var(--mp-text-sub);
+  margin-bottom: 8px;
+}
+.mp-metric-val {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--mp-text);
+  line-height: 1;
+}
+.mp-metric-val span {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--mp-text-sub);
+  margin-left: 4px;
+}
+.mp-metric-val.accent { color: var(--mp-accent); }
+
+/* ── セクションヘッダー ── */
+.mp-sec-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mp-sec-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mp-text);
+}
+
+/* ── 案件カード ── */
+.mp-case-list { display: flex; flex-direction: column; gap: 12px; }
+
+.mp-case-card {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  padding: 20px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  transition: border-color .15s, box-shadow .15s;
+  color: inherit;
+}
+.mp-case-card:hover {
+  border-color: var(--mp-border2);
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.mp-case-card.has-action { border-left: 3px solid var(--mp-accent); }
+
+.mp-case-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mp-case-meta {
+  font-size: 11px;
+  color: var(--mp-text-hint);
+  margin-bottom: 4px;
+}
+.mp-case-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mp-text);
+}
+.mp-type-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  color: #0369A1;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+/* ── プログレスバー ── */
+.mp-prog-wrap { display: flex; flex-direction: column; gap: 5px; }
+.mp-prog-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.mp-prog-labels span { color: var(--mp-text-sub); }
+.mp-prog-labels strong { color: var(--mp-text); font-weight: 600; }
+.mp-prog-outer {
+  height: 5px;
+  background: var(--mp-bg);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--mp-border);
+}
+.mp-prog-inner {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .4s ease;
+}
+.mp-prog-inner.active { background: var(--mp-accent); }
+.mp-prog-inner.done   { background: #34D399; }
+.mp-prog-inner.nc     { background: var(--mp-border2); }
+
+.mp-case-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--mp-border);
+}
+.mp-case-footer-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--mp-text-hint);
+}
+.mp-case-arrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mp-accent);
+}
+
+/* ── バッジ ── */
+.mp-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.b-red    { background: var(--mp-accent-l); color: var(--mp-accent-d); border: 1px solid #f0c0c0; }
+.b-amber  { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+.b-green  { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+.b-blue   { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+.b-gray   { background: var(--mp-bg); color: var(--mp-text-sub); border: 1px solid var(--mp-border2); }
+
+/* ── エンプティ ── */
+.mp-empty {
+  background: var(--mp-surface);
+  border: 1px dashed var(--mp-border2);
+  border-radius: var(--mp-radius-lg);
+  padding: 48px 24px;
+  text-align: center;
+}
+.mp-empty-title { font-size: 14px; font-weight: 500; color: var(--mp-text); margin-bottom: 6px; }
+.mp-empty-sub   { font-size: 12px; color: var(--mp-text-sub); }
+
+/* ── 契約情報グリッド ── */
+.mp-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.mp-info-card {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  padding: 18px 20px;
+}
+.mp-info-card-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mp-text);
+  margin-bottom: 12px;
+}
+.mp-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--mp-border);
+  font-size: 12px;
+  gap: 12px;
+}
+.mp-info-row:last-child { border-bottom: none; }
+.mp-info-label { color: var(--mp-text-sub); flex-shrink: 0; }
+.mp-info-val   { font-weight: 500; color: var(--mp-text); text-align: right; }
+.mp-info-row-full { flex-direction: column; gap: 4px; }
+.mp-info-row-full .mp-info-val { text-align: left; }
+.mp-info-multiline {
+  white-space: pre-wrap;
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  width: 100%;
+}
+.mp-info-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--mp-text-hint);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--mp-border);
+  margin-bottom: 4px;
+}
+
+/* ── パンくず ── */
+.mp-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--mp-text-hint);
+}
+.mp-breadcrumb a { color: var(--mp-text-sub); text-decoration: none; }
+.mp-breadcrumb a:hover { color: var(--mp-accent); }
+.mp-breadcrumb svg { flex-shrink: 0; }
+
+/* ── カード ── */
+.mp-card {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  padding: 20px 22px;
+}
+.mp-card-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.mp-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mp-text);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.mp-card-title svg { color: var(--mp-accent); flex-shrink: 0; }
+
+/* ── 案件ヘッドカード ── */
+.mp-head-card {}
+.mp-head-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.mp-head-num { font-size: 11px; color: var(--mp-text-hint); margin-bottom: 4px; }
+.mp-head-title { font-size: 16px; font-weight: 600; color: var(--mp-text); }
+.mp-head-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  margin-top: 6px;
+}
+
+/* ── ステップバー ── */
+.mp-steps {
+  display: flex;
+  align-items: flex-start;
+}
+.mp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+.mp-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 55%;
+  right: -55%;
+  height: 2px;
+  background: var(--mp-border);
+  z-index: 0;
+}
+.mp-step.done:not(:last-child)::after { background: var(--mp-border2); }
+.mp-step.cur:not(:last-child)::after  { background: var(--mp-border); }
+
+.mp-step-c {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+.mp-step-c.done, .mp-step.done .mp-step-c { background: var(--mp-border2); color: var(--mp-text-sub); }
+.mp-step-c.cur,  .mp-step.cur  .mp-step-c {
+  background: var(--mp-accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--mp-accent-l);
+}
+.mp-step-c.todo, .mp-step.todo .mp-step-c {
+  background: var(--mp-bg);
+  color: var(--mp-text-hint);
+  border: 1px solid var(--mp-border2);
+}
+
+.mp-step-lbl {
+  font-size: 10px;
+  color: var(--mp-text-hint);
+  margin-top: 6px;
+  text-align: center;
+  line-height: 1.4;
+}
+.mp-step.cur  .mp-step-lbl { color: var(--mp-accent); font-weight: 500; }
+.mp-step.done .mp-step-lbl { color: var(--mp-text-sub); }
+
+/* ── 2カラム ── */
+.mp-two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.mp-left-col  { display: flex; flex-direction: column; gap: 18px; }
+.mp-right-col { display: flex; flex-direction: column; gap: 18px; }
+
+/* ── アップロードフォーム ── */
+.mp-upload-form { display: flex; flex-direction: column; gap: 14px; }
+.mp-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mp-form-group { display: flex; flex-direction: column; gap: 5px; }
+.mp-form-label { font-size: 12px; font-weight: 500; color: var(--mp-text-sub); }
+.mp-select {
+  padding: 8px 10px;
+  border: 1px solid var(--mp-border2);
+  border-radius: var(--mp-radius);
+  font-size: 13px;
+  background: var(--mp-surface);
+  color: var(--mp-text);
+  outline: none;
+  transition: border-color .2s;
+  font-family: inherit;
+}
+.mp-select:focus { border-color: var(--mp-accent); }
+
+.mp-upload-zone {
+  border: 1.5px dashed var(--mp-border2);
+  border-radius: var(--mp-radius);
+  padding: 20px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--mp-bg);
+  transition: border-color .2s, background .2s;
+}
+.mp-upload-zone:hover,
+.mp-upload-zone.dragover,
+.mp-upload-zone.selected { border-color: var(--mp-accent); background: var(--mp-accent-l); }
+
+.mp-uz-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  color: var(--mp-text-sub);
+}
+.mp-uz-main  { font-size: 13px; color: var(--mp-text-sub); font-weight: 500; }
+.mp-uz-sub   { font-size: 11px; color: var(--mp-text-hint); margin-top: 3px; }
+.mp-uz-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 16px;
+  border: 1px solid var(--mp-border2);
+  border-radius: var(--mp-radius);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mp-text-sub);
+  background: var(--mp-surface);
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.mp-uz-btn:hover { border-color: var(--mp-accent); color: var(--mp-accent); }
+.mp-uz-hint { font-size: 11px; color: var(--mp-text-hint); margin-top: 8px; }
+
+.mp-submit-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--mp-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--mp-radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+.mp-submit-btn:hover    { background: var(--mp-accent-d); }
+.mp-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.mp-upload-msg {
+  padding: 10px 14px;
+  border-radius: var(--mp-radius);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.mp-upload-msg.success { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+.mp-upload-msg.error   { background: var(--mp-accent-l); border: 1px solid #f0c0c0; color: #8a2020; }
+
+/* ── 書類テーブル ── */
+.mp-doc-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+}
+.mp-doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.mp-doc-table thead tr { background: var(--mp-bg); }
+.mp-doc-table th {
+  padding: 10px 12px;
+  font-weight: 600;
+  color: var(--mp-text-sub);
+  text-align: left;
+  border-bottom: 1px solid var(--mp-border);
+  white-space: nowrap;
+}
+.mp-doc-table td {
+  padding: 10px 12px;
+  color: var(--mp-text);
+  border-bottom: 1px solid var(--mp-border);
+  vertical-align: middle;
+}
+.mp-doc-table tbody tr:last-child td { border-bottom: none; }
+.mp-doc-table tbody tr:hover { background: var(--mp-bg); }
+.mp-doc-link { color: var(--mp-accent); text-decoration: none; font-size: 11px; }
+.mp-doc-link:hover { text-decoration: underline; }
+.mp-doc-empty { font-size: 13px; color: var(--mp-text-hint); text-align: center; padding: 24px 0; }
+
+/* ── スクロールバー ── */
+.mp-sidebar::-webkit-scrollbar,
+.mp-main::-webkit-scrollbar    { width: 4px; }
+.mp-sidebar::-webkit-scrollbar-thumb,
+.mp-main::-webkit-scrollbar-thumb { background: var(--mp-border2); border-radius: 2px; }
+
+/* ── グローバルヘッダー ── */
+.mp-global-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--mp-surface);
+  border-bottom: 1px solid var(--mp-border);
+  height: 58px;
+  display: flex;
+  align-items: center;
+}
+.mp-global-header-inner {
+  width: 100%;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+.mp-global-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.mp-global-logo-mark {
+  width: 34px;
+  height: 34px;
+  background: var(--mp-accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mp-global-logo-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--mp-text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.mp-global-logo-text small {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mp-text-sub);
+  letter-spacing: 0.02em;
+}
+.mp-global-header-user {
+  font-size: 13px;
+  color: var(--mp-text-sub);
+}
+
+/* ── ヘッダーあり時のレイアウト調整 ── */
+.mp-layout-with-header {
+  min-height: calc(100vh - 58px);
+}
+.mp-sidebar-with-header {
+  top: 58px;
+  height: calc(100vh - 58px);
+}
+
+/* ── 要対応メトリクス（アクセントカード） ── */
+.mp-metric-accent {
+  border-left: 3px solid var(--mp-accent);
+  max-width: 320px;
+}
+.mp-metric-note {
+  font-size: 11px;
+  color: var(--mp-text-hint);
+  margin-top: 6px;
+}
+
+/* ── 提出待ち書類リスト ── */
+.mp-pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.mp-pending-item {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mp-pending-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.mp-pending-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.mp-pending-type {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mp-text-hint);
+}
+.mp-pending-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mp-text);
+}
+.mp-pending-note {
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  background: var(--mp-bg);
+  border-radius: var(--mp-radius);
+  padding: 7px 10px;
+  line-height: 1.5;
+}
+.mp-pending-upload {
+  border: 1.5px dashed var(--mp-border2);
+  border-radius: var(--mp-radius);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--mp-bg);
+  transition: border-color .2s, background .2s;
+}
+.mp-pending-upload:hover,
+.mp-pending-upload.dragover,
+.mp-pending-upload.selected {
+  border-color: var(--mp-accent);
+  background: var(--mp-accent-l);
+}
+
+/* ── 再提出エリア ── */
+.mp-resubmit-area {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--mp-border2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mp-resubmit-upload {
+  border: 1.5px dashed var(--mp-border2);
+  border-radius: var(--mp-radius);
+  padding: 10px 12px;
+  text-align: center;
+  background: var(--mp-bg);
+  transition: border-color .2s, background .2s;
+  cursor: pointer;
+}
+.mp-resubmit-upload:hover,
+.mp-resubmit-upload.dragover,
+.mp-resubmit-upload.selected {
+  border-color: var(--mp-accent);
+  background: var(--mp-accent-l);
+}
+.mp-resubmit-btn {
+  width: 100%;
+  padding: 7px;
+  background: var(--mp-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--mp-radius);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+}
+.mp-resubmit-btn:hover    { background: var(--mp-accent-d); }
+.mp-resubmit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ── アコーディオン ── */
+.mp-accordion-body {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.mp-accordion-body.open {
+  display: flex;
+}
+.mp-accordion-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid var(--mp-accent);
+  border-radius: var(--mp-radius);
+  background: transparent;
+  color: var(--mp-accent);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s, color .15s;
+  white-space: nowrap;
+}
+.mp-accordion-btn:hover {
+  background: var(--mp-accent-l);
+}
+.mp-accordion-btn-sm {
+  padding: 4px 10px;
+  font-size: 11px;
+  margin-top: 8px;
+}
+.mp-accordion-icon {
+  transition: transform .2s ease;
+  flex-shrink: 0;
+}
+
+/* ── 保険金請求書フォーム ── */
+.mp-claim-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.mp-claim-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--mp-text-hint);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--mp-border);
+  margin-top: 4px;
+}
+.mp-claim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mp-claim-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.mp-claim-full {
+  grid-column: 1 / -1;
+}
+.mp-claim-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mp-text-sub);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.mp-claim-required {
+  font-size: 10px;
+  background: var(--mp-accent-l);
+  color: var(--mp-accent-d);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.mp-claim-input {
+  padding: 8px 10px;
+  border: 1px solid var(--mp-border2);
+  border-radius: var(--mp-radius);
+  font-size: 13px;
+  background: var(--mp-surface);
+  color: var(--mp-text);
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s;
+  width: 100%;
+}
+.mp-claim-input:focus { border-color: var(--mp-accent); }
+.mp-claim-readonly {
+  background: var(--mp-bg);
+  color: var(--mp-text-sub);
+  cursor: default;
+}
+.mp-claim-textarea {
+  resize: vertical;
+  line-height: 1.6;
+  min-height: 100px;
+}
+.mp-claim-consent-box {
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mp-claim-consent-text {
+  font-size: 11px;
+  color: var(--mp-text-sub);
+  line-height: 1.7;
+}
+.mp-claim-check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mp-text);
+  cursor: pointer;
+}
+.mp-claim-check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--mp-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.mp-claim-signature {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  border-bottom: 2px solid var(--mp-accent);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  padding: 8px 4px;
+  background: transparent;
+}
+.mp-claim-signature:focus {
+  border-bottom-color: var(--mp-accent-d);
+  outline: none;
+}
+.mp-claim-sig-note {
+  font-size: 11px;
+  color: var(--mp-text-hint);
+  margin-top: 4px;
+}
+
+/* ── サイドバーロゴ ── */
+.mp-sidebar-logo {
+  padding: 16px 12px 12px;
+  border-bottom: 1px solid var(--mp-border);
+  margin-bottom: 8px;
+}
+.mp-sidebar-logo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.mp-sidebar-logo-img {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  display: block;
+}
+.mp-sidebar-logo-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mp-text);
+  line-height: 1.3;
+  text-align: center;
+}
+.mp-sidebar-logo-text small {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mp-text-sub);
+  margin-top: 2px;
+}
+
+/* ── ステータスツールチップ ── */
+.mp-status-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.mp-tooltip-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--mp-border2);
+  color: var(--mp-text-sub);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: default;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.mp-tooltip-trigger:hover { background: var(--mp-text-hint); color: var(--mp-surface); }
+.mp-tooltip-box {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--mp-text);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.6;
+  padding: 8px 11px;
+  border-radius: var(--mp-radius);
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
+  min-width: 180px;
+  text-align: left;
+}
+.mp-tooltip-box::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--mp-text);
+}
+.mp-tooltip-trigger:hover .mp-tooltip-box { display: block; }
+
+/* ── ツールチップ カクつき修正 ── */
+.mp-tooltip-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--mp-border2);
+  color: var(--mp-text-sub);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: default;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.mp-tooltip-trigger:hover { background: var(--mp-text-hint); color: var(--mp-surface); }
+.mp-tooltip-box {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  transform: none;
+  background: var(--mp-text);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.6;
+  padding: 8px 11px;
+  border-radius: var(--mp-radius);
+  z-index: 50;
+  pointer-events: none;
+  min-width: 200px;
+  max-width: 260px;
+  white-space: normal;
+  text-align: left;
+}
+.mp-tooltip-box::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 12px;
+  transform: none;
+  border: 5px solid transparent;
+  border-top-color: var(--mp-text);
+}
+.mp-tooltip-trigger:hover .mp-tooltip-box {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ── カード内要対応アラート ── */
+.mp-case-action-alert {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: var(--mp-accent-l);
+  border: 1px solid #f0c0c0;
+  border-radius: var(--mp-radius);
+  font-size: 12px;
+  color: var(--mp-accent-d);
+  font-weight: 500;
+}
+
+/* ============================================
+   レスポンシブ対応（SP：768px以下）
+   ============================================ */
+
+/* ── ハンバーガーボタン（SP時のみ表示） ── */
+.mp-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.mp-hamburger:hover { background: var(--mp-bg); }
+.mp-hamburger svg { pointer-events: none; }
+
+/* ── サイドバーオーバーレイ ── */
+.mp-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 205;
+}
+.mp-sidebar-overlay.open { display: block; }
+
+@media (max-width: 768px) {
+
+  /* ハンバーガー表示 */
+  .mp-hamburger { display: flex; }
+
+  /* グローバルヘッダー：左右に要素を分散 */
+  .mp-global-header-inner {
+    justify-content: space-between !important;
+  }
+  .mp-global-header-sp-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mp-global-header-user {
+    font-size: 12px;
+  }
+
+  /* レイアウト：サイドバーを外してメインのみ表示 */
+  .mp-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* サイドバー：SP時はオーバーレイ方式に */
+  .mp-sidebar,
+  .mp-sidebar-with-header {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 260px;
+    height: 100vh;
+    z-index: 210;
+    transition: left 0.25s ease;
+    top: 0 !important;
+    height: 100vh !important;
+  }
+  .mp-sidebar.open,
+  .mp-sidebar-with-header.open {
+    left: 0;
+  }
+
+  /* サブメニュー：サイドバー内には出さず、コンテンツ最上段の横スクロールタブとして表示する。
+     要素そのものを _scripts.html.erb で .mp-sp-subnav へ移動しているため、
+     各ページが登録済みのクリックハンドラはそのまま有効。 */
+  .mp-nav-chevron { display: none; }
+
+  .mp-sp-subnav {
+    /* .mp-main の左右padding（16px）と上padding分を打ち消して画面端まで伸ばす */
+    margin: -16px -16px 2px;
+    background: var(--mp-surface);
+    border-bottom: 1px solid var(--mp-border);
+    position: relative;
+  }
+  /* 右側にまだタブが続いていることを示すグラデーション＋矢印。
+     スクロール位置に応じて _scripts.html.erb が .mp-subnav-more を付け外しする。 */
+  .mp-sp-subnav::after {
+    content: "❯";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 9px;
+    font-size: 12px;
+    color: var(--mp-text-sub);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--mp-surface) 55%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .mp-sp-subnav.mp-subnav-more::after { opacity: 1; }
+  /* .mp-nav-group.open の子ではなくなるため、表示指定を !important で上書きする */
+  .mp-sp-subnav .mp-nav-submenu {
+    display: flex !important;
+    position: static;
+    width: auto;
+    height: auto !important;
+    z-index: auto;
+    transition: none;
+    border-left: none;
+    background: none;
+    gap: 2px;
+    padding: 0 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mp-sp-subnav .mp-nav-submenu::-webkit-scrollbar { display: none; }
+  .mp-sp-subnav .mp-nav-submenu-ic,
+  .mp-sp-subnav .mp-nav-submenu-title { display: none; }
+  .mp-sp-subnav .mp-nav-subitem {
+    flex: 0 0 auto;
+    padding: 13px 8px;
+    font-size: 13px;
+    border-bottom: 2px solid transparent;
+  }
+  .mp-sp-subnav .mp-nav-subitem.active {
+    background: none;
+    color: var(--mp-agency-accent);
+    border-bottom-color: var(--mp-agency-accent);
+    font-weight: 600;
+  }
+
+  /* メインコンテンツ：余白調整 */
+  .mp-main { padding: 16px; gap: 14px; }
+
+  /* 2カラム → 1カラム */
+  .mp-two-col   { grid-template-columns: 1fr; }
+  .mp-metrics   { grid-template-columns: 1fr; }
+  .mp-info-grid { grid-template-columns: 1fr; }
+
+  /* 案件ヘッドカード */
+  .mp-head-top { flex-direction: column; gap: 10px; }
+
+  /* ステップバーをSP用に縮小 */
+  .mp-steps { gap: 0; }
+  .mp-step-lbl { font-size: 9px; max-width: 52px; }
+  .mp-step-c   { width: 22px; height: 22px; font-size: 9px; }
+
+  /* テーブルの横スクロール許可 → SP時はカード形式に変更 */
+  .mp-doc-table-wrap { overflow-x: visible; }
+
+  /* 保険金請求書フォーム */
+  .mp-claim-grid { grid-template-columns: 1fr; }
+  .mp-claim-full { grid-column: 1; }
+
+  /* 目次グリッド（ヘルプページ） */
+  .hlp-method-grid { grid-template-columns: 1fr; }
+
+  /* ページタイトル */
+  .mp-page-title { font-size: 18px; }
+
+  /* カード余白 */
+  .mp-card { padding: 14px 14px; }
+
+  /* 書類の提出：ヘッダーを縦並びに */
+  .mp-pending-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .mp-pending-header > div:last-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .mp-accordion-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* 提出済み書類テーブル → カード形式 */
+  .mp-doc-table thead { display: none; }
+  .mp-doc-table tbody tr {
+    display: block;
+    border: 1px solid var(--mp-border);
+    border-radius: var(--mp-radius);
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    background: var(--mp-surface);
+  }
+  .mp-doc-table td {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+    border: none;
+    font-size: 12px;
+  }
+  .mp-doc-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--mp-text-sub);
+    min-width: 72px;
+    flex-shrink: 0;
+    font-size: 11px;
+    padding-top: 1px;
+  }
+  /* 再提出行（colspan）はそのまま表示 */
+  .mp-doc-table td[colspan] {
+    display: block;
+    padding: 0;
+  }
+  .mp-doc-table td[colspan]::before { display: none; }
+}
+
+/* ── 弁護士案内マイページ専用（SP対応） ── */
+@media (max-width: 768px) {
+  .lw-type-grid  { grid-template-columns: 1fr !important; }
+  .lw-check-grid { grid-template-columns: 1fr !important; }
+  .lw-area-grid  { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ── 代理店マイページ専用：サイドバーのサブメニュー（フライアウト） ──
+   app/views/mypage/agency/_sidebar.html.erb + _scripts.html.erb と対で使用する。
+   以前は各ページの<style>に同じ内容がコピーされていたため、共通化してここに集約。 */
+:root {
+  --mp-agency-accent:   #0090B0;
+  --mp-agency-accent-l: #E1F3F6;
+}
+.mp-sidebar .mp-nav-item.active {
+  background: var(--mp-agency-accent-l);
+  color: var(--mp-agency-accent);
+}
+.mp-sidebar .mp-nav-item.active .mp-nav-ic { color: var(--mp-agency-accent); }
+.mp-nav-group-toggle { width: 100%; background: none; border: none; cursor: pointer; font-family: inherit; }
+.mp-nav-chevron { margin-left: auto; flex-shrink: 0; transition: transform 0.2s ease; opacity: .55; }
+.mp-nav-group.open .mp-nav-group-toggle .mp-nav-chevron { transform: rotate(90deg); }
+.mp-nav-submenu {
+  display: none;
+  position: fixed;
+  width: 150px;
+  background: var(--mp-surface);
+  border-left: 0.5px solid var(--mp-border);
+  z-index: 250;
+  padding: 6px 0;
+  overflow-y: auto;
+}
+.mp-nav-group.open .mp-nav-submenu { display: block; }
+.mp-main { transition: margin-left 0.22s cubic-bezier(.4,0,.2,1); }
+.mp-layout.mp-submenu-open .mp-main { margin-left: 150px; }
+.mp-nav-submenu-ic {
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: 13px auto 8px;
+  color: var(--mp-text-sub);
+}
+.mp-nav-submenu-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mp-text-sub);
+  letter-spacing: .04em;
+  padding: 0 16px 19px;
+  white-space: nowrap;
+  text-align: center;
+  border-bottom: 1px solid var(--mp-border);
+}
+.mp-nav-subitem {
+  display: block;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--mp-text-sub);
+  text-decoration: none;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.mp-nav-subitem:hover { background: var(--mp-bg); color: var(--mp-text); }
+.mp-nav-subitem.active { background: var(--mp-agency-accent-l); color: var(--mp-agency-accent); font-weight: 500; }
+/* サブメニュー内の項目グループを視覚的に区切る薄い罫線（下辺に付与） */
+.mp-nav-subitem-divider { border-bottom: 1px solid var(--mp-border); }
+/* 中身のページが未実装の項目（例：見込管理）用。リンクとして機能させず、準備中である旨を示す */
+.mp-nav-subitem-disabled {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+  color: var(--mp-text-hint);
+}
+.mp-nav-subitem-disabled:hover { background: none; color: var(--mp-text-hint); }
+.mp-nav-subitem-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--mp-text-hint);
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: 20px;
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* ── 代理店マイページ専用：一覧＋詳細カード共通パーツ ──
+   以前はページごとに.mp-detail-card／.mp-notice-detail-emptyを使うのに定義がなく
+   （others.html.erbとindex.html.erbにしか定義がなかった)、profile/contracts/feesでは
+   スタイルが当たらないまま表示されていたため、共通コンポーネントとして集約する。 */
+.mp-detail-card {
+  background: var(--mp-surface);
+  border-radius: 0;
+  padding: 24px 28px;
+}
+.mp-notice-detail-empty { color: var(--mp-text-hint); font-size: 13px; text-align: center; padding: 60px 0; }
+
+/* 一覧が取得件数上限に達した場合の注記（agency_controller.rb の *_truncated フラグと対） */
+.mp-truncation-notice {
+  font-size: 11px;
+  color: var(--mp-text-sub);
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+}
+
+/* ============================================
+   代理店マイページ専用：SP表示の詳細カード（ボトムシート）
+   index / contracts / fees / others / profile の5ページで共通利用する。
+   以前は各ページの<style>に約40行の同じ内容がコピーされていたため、ここに集約した。
+   ページ側の<style>は外部CSSより後に読まれるため、ページ側で宣言済みの
+   セレクタ（.mp-contract-detail-col 等）を上書きできるよう .mp-main を前置して
+   詳細度を上げている。
+   ============================================ */
+.mp-detail-sp-close { display: none; }
+.mp-detail-sp-backdrop { display: none; }
+
+@media (max-width: 900px) {
+  /* 固定幅の子要素が残っていても画面外へ突き抜けないようにする保険。
+     position:fixed の子（ボトムシート・背景）は viewport 基準のため影響を受けない。 */
+  .mp-main { overflow-x: hidden; min-width: 0; }
+
+  /* 一覧＋詳細の詳細側を、画面下からせり上がるボトムシートにする */
+  .mp-main .mp-contract-detail-col,
+  .mp-main .mp-detail-card-col,
+  .mp-main .mp-notice-detail-col {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    min-height: 60vh;
+    max-height: 90vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.18);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 260;
+    padding: 44px 20px 60px;
+  }
+  .mp-main .mp-contract-detail-col.mp-detail-sp-open,
+  .mp-main .mp-detail-card-col.mp-detail-sp-open,
+  .mp-main .mp-notice-detail-col.mp-detail-sp-open {
+    transform: translateY(0);
+  }
+
+  /* 上端の「つまみ」。下方向へドラッグして閉じられることを示す（JSは_scripts.html.erb） */
+  .mp-main .mp-contract-detail-col::before,
+  .mp-main .mp-detail-card-col::before,
+  .mp-main .mp-notice-detail-col::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--mp-border);
+  }
+
+  /* 詳細内のラベル・値は縦積みにして横幅を食わないようにする */
+  .mp-main .mp-contract-detail-col .mp-info-row,
+  .mp-main .mp-detail-card-col .mp-info-row,
+  .mp-main .mp-notice-detail-col .mp-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .mp-main .mp-contract-detail-col .mp-info-label,
+  .mp-main .mp-detail-card-col .mp-info-label,
+  .mp-main .mp-notice-detail-col .mp-info-label { width: auto; }
+  .mp-main .mp-contract-detail-col .mp-info-val,
+  .mp-main .mp-detail-card-col .mp-info-val,
+  .mp-main .mp-notice-detail-col .mp-info-val { text-align: left; }
+
+  /* 閉じるボタン：タップ領域を44px確保する */
+  .mp-main .mp-detail-sp-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    color: var(--mp-text-sub);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .mp-main .mp-detail-sp-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 250;
+  }
+  .mp-main .mp-detail-sp-backdrop.open { display: block; }
+
+  /* ボトムシートを開いている間は背面をスクロールさせない */
+  body:has(.mp-detail-sp-backdrop.open) { overflow: hidden; }
+
+  /* 一覧行：SPでは情報を間引き、長い値は折り返す */
+  .mp-main .mp-contract-row-id { display: none; }
+  .mp-main .mp-agent-row-line { flex-wrap: wrap; }
+  .mp-main .mp-feedetail-list-item-sub { margin-left: 0; white-space: normal; }
+
+  /* ページネーション・ページヘッドのタップ領域と折り返し */
+  .mp-main .mp-page-btn { min-height: 44px; padding: 10px 16px; }
+  .mp-main .mp-page-head { height: auto; min-height: 35px; }
+}
+
+/* ── 代理店マイページ専用：SP時にフライアウト用の押し出しを解除する ──
+   .mp-layout.mp-submenu-open .mp-main { margin-left: 150px } は PC で
+   サブメニューのフライアウト分だけコンテンツを右へ寄せるための指定。
+   SPではサブメニューをコンテンツ最上段のタブへ移しており押し出しは不要なため解除する。
+   上の @media ブロック内に同じ指定を書くと、後方にある margin-left:150px の方が
+   （詳細度が同じで後勝ちのため）優先されてしまうので、ここに置いている。 */
+@media (max-width: 768px) {
+  .mp-layout.mp-submenu-open .mp-main { margin-left: 0; }
+}
+
+/* ── 代理店マイページ専用：各ページの.mp-page-head右端に出す説明ツールチップ ──
+   PCのみで表示し、SPでは非表示にする（スマホではホバー操作ができないため）。
+   margin-left:auto で常に行の右端へ寄せているので、親の justify-content の値に関わらず
+   同じ位置に表示される。 */
+.mp-help-tip {
+  position: relative;
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  color: var(--mp-text-sub);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+.mp-help-tip-text {
+  position: absolute;
+  top: 26px;
+  right: 0;
+  width: 240px;
+  background: var(--mp-text);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 10px 12px;
+  border-radius: var(--mp-radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 50;
+  pointer-events: none;
+}
+.mp-help-tip:hover .mp-help-tip-text,
+.mp-help-tip:focus .mp-help-tip-text,
+.mp-help-tip:focus-visible .mp-help-tip-text {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  .mp-help-tip { display: none; }
+}

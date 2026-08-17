@@ -1,0 +1,1349 @@
+/* ==========================================================================
+   LegalBase 代理店ポータル：mypage.css への差分・追加分
+
+   ここだけを編集してください。mypage.css（bonobo からのコピー）は
+   同期のため一切編集しません。
+
+   内訳
+     A. LegalBase 向けのトークン上書き（アクセントカラー等）
+     B. bonobo 側で各ページの <style> に書かれていて mypage.css に無いもの
+        （ユーザー管理 / ご利用マニュアル / 法令検索 の一覧・詳細 など）を移植
+     C. React 化にともなう構造差の吸収（サブメニューを PC/SP で二重描画する等）
+     D. LegalBase 固有の画面（URL コピー・料金シミュレーター・問答集 など）
+   ========================================================================== */
+
+/* ==========================================================================
+   A. トークン上書き
+   ========================================================================== */
+
+/* 代理店ポータルはすべて代理店向け画面のため、汎用アクセント（bonobo では赤）も
+   代理店アクセント（ティール）に寄せて全体を一色で統一する。 */
+:root {
+  --mp-accent: var(--mp-agency-accent);
+  --mp-accent-l: var(--mp-agency-accent-l);
+  --mp-accent-d: #00738A;
+}
+
+/* bonobo の代理店マイページは全ページの <style> で PC 時ヘッダーを 40px にしている。
+   LegalBase では全ページ共通なのでここへ集約する。 */
+@media (min-width: 769px) {
+  .mp-global-header {
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+  }
+  .mp-global-header-user {
+    display: none;
+  }
+  .mp-sidebar-with-header {
+    top: 40px;
+    height: calc(100vh - 40px);
+  }
+  .mp-layout-with-header {
+    min-height: calc(100vh - 40px);
+  }
+}
+
+/* ==========================================================================
+   C. React 化にともなう構造差の吸収
+   ========================================================================== */
+
+/* bonobo は JS でサブメニューの fixed 位置を実測して設定しているが、
+   LegalBase はヘッダー高さ・サイドバー幅が固定なので CSS だけで確定できる。 */
+@media (min-width: 769px) {
+  .mp-nav-submenu {
+    top: 40px;
+    left: var(--mp-sidebar-w);
+    height: calc(100vh - 40px);
+  }
+  /* SP 用の横スクロールタブは PC では出さない */
+  .mp-sp-subnav {
+    display: none;
+  }
+}
+
+/* bonobo は SP でサブメニューの DOM 自体をコンテンツ最上段へ移動しているが、
+   React では PC 用（サイドバー内）と SP 用（.mp-sp-subnav）を二重に描画して
+   表示を CSS で切り替える。 */
+@media (max-width: 768px) {
+  .mp-sidebar .mp-nav-submenu {
+    display: none !important;
+  }
+  .mp-sp-subnav {
+    display: block;
+  }
+}
+
+/* サイドバーのロゴエリア（bonobo の _sidebar.html.erb と対） */
+.mp-sidebar-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* ロゴと代理店バッジの間隔。バッジが無いページでは効かない */
+  gap: 20px;
+  padding: 2px 10px 14px;
+  border-bottom: 1px solid var(--mp-border);
+  margin-bottom: 6px;
+}
+/* ロゴを大きく出すため、画像とテキストは横並びではなく縦積みにする */
+.mp-sidebar-logo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  text-align: center;
+}
+.mp-sidebar-logo-img {
+  object-fit: contain;
+  flex-shrink: 0;
+  width: auto;
+  height: 60px;
+}
+.mp-sidebar-logo-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mp-text);
+  line-height: 1.3;
+}
+.mp-sidebar-logo-text small {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mp-text-sub);
+}
+
+/* ハンバーガー。SP での表示指定（display:flex）は mypage.css 側にあるため、
+   ここでは display を書かずに見た目だけ定義し、PC 用の非表示だけをメディアクエリで当てる。
+   （素の .mp-hamburger { display:none } と書くと、後勝ちで mypage.css の SP 指定を潰してしまう） */
+.mp-hamburger {
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--mp-radius);
+  cursor: pointer;
+}
+.mp-hamburger:hover {
+  background: var(--mp-bg);
+}
+@media (min-width: 769px) {
+  .mp-hamburger,
+  .mp-global-header-sp-left {
+    display: none;
+  }
+}
+
+/* サイドバーのオーバーレイ（SP でドロワーを開いたときの背景） */
+.mp-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 205;
+}
+@media (max-width: 768px) {
+  .mp-sidebar-overlay.open {
+    display: block;
+  }
+}
+
+/* フッター（bonobo: _footer.html.erb と同じ見た目） */
+.mp-footer {
+  font-size: 10px;
+  color: var(--mp-text-hint);
+  text-align: center;
+  margin: auto 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--mp-border);
+}
+
+/* 代理店番号バッジ（LEGIEW 限定表示などの識別用） */
+.mp-agent-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--mp-agency-accent-l);
+  color: var(--mp-agency-accent);
+  border: 1px solid var(--mp-agency-accent);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   B-1. ユーザー管理（bonobo: users.html.erb の <style> より）
+   ========================================================================== */
+
+.mp-user-card {
+  max-width: 640px;
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: 0;
+  padding: 24px 28px;
+}
+.mp-user-lead {
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+.mp-user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--mp-border);
+  font-size: 13px;
+}
+.mp-user-row:last-child {
+  border-bottom: none;
+}
+.mp-user-delete-btn {
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #b03030;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.mp-user-delete-btn:hover:not(:disabled) {
+  background: #fae9e9;
+  border-color: #f0c0c0;
+}
+.mp-user-delete-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.mp-user-add-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+.mp-user-add-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--mp-text);
+  font-family: inherit;
+}
+.mp-user-add-btn {
+  background: var(--mp-agency-accent);
+  border: 1px solid var(--mp-agency-accent);
+  border-radius: var(--mp-radius);
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.mp-user-add-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 操作結果のメッセージ（bonobo の flash 表示に相当） */
+.mp-flash {
+  max-width: 640px;
+  margin-bottom: 4px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.mp-flash-error {
+  background: #fae9e9;
+  border: 1px solid #f0c0c0;
+  color: #8a2020;
+}
+.mp-flash-notice {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+/* ==========================================================================
+   B-2. ご利用マニュアル（bonobo: manual.html.erb の <style> より）
+   ========================================================================== */
+
+.mp-manual {
+  max-width: 900px;
+}
+.mp-manual-lead {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--mp-text-sub);
+  margin: 0 0 20px;
+}
+.mp-manual-toc {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  padding: 18px 22px;
+  margin-bottom: 24px;
+}
+.mp-manual-toc-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mp-text);
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+.mp-manual-toc ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--mp-text-sub);
+  list-style: decimal;
+}
+.mp-manual-toc a {
+  color: var(--mp-agency-accent);
+  text-decoration: none;
+}
+.mp-manual-toc a:hover {
+  text-decoration: underline;
+}
+.mp-manual-sec {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  scroll-margin-top: 70px;
+}
+.mp-manual-sec-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--mp-text);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--mp-border);
+}
+.mp-manual-sec-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--mp-agency-accent-l);
+  color: var(--mp-agency-accent);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mp-manual-sub {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mp-text);
+  margin: 20px 0 6px;
+  padding-left: 10px;
+  border-left: 3px solid var(--mp-agency-accent);
+}
+.mp-manual-sub:first-of-type {
+  margin-top: 0;
+}
+.mp-manual p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--mp-text);
+  margin: 0 0 8px;
+}
+.mp-manual ul,
+.mp-manual ol.mp-manual-steps {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--mp-text);
+  line-height: 1.9;
+}
+.mp-manual ul {
+  list-style: disc;
+}
+.mp-manual ol.mp-manual-steps {
+  list-style: decimal;
+}
+.mp-manual li {
+  margin-bottom: 3px;
+}
+.mp-manual strong {
+  font-weight: 600;
+}
+.mp-manual-note {
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--mp-text-sub);
+  margin: 10px 0 12px;
+}
+.mp-manual-warn {
+  background: #fae9e9;
+  border: 1px solid #f0c0c0;
+  border-radius: var(--mp-radius);
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #8a2020;
+  margin: 10px 0 12px;
+}
+.mp-manual-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin: 8px 0 12px;
+}
+.mp-manual-table th,
+.mp-manual-table td {
+  border: 1px solid var(--mp-border);
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.7;
+}
+.mp-manual-table th {
+  background: var(--mp-bg);
+  font-weight: 600;
+  color: var(--mp-text);
+  white-space: nowrap;
+}
+.mp-manual a {
+  color: var(--mp-agency-accent);
+}
+
+@media (max-width: 768px) {
+  .mp-manual-sec {
+    padding: 18px 16px;
+  }
+  .mp-manual-sec-title {
+    font-size: 15px;
+  }
+  .mp-manual-table,
+  .mp-manual-table tbody,
+  .mp-manual-table tr,
+  .mp-manual-table td,
+  .mp-manual-table th {
+    display: block;
+    width: 100%;
+  }
+  .mp-manual-table tr {
+    border: 1px solid var(--mp-border);
+    padding: 8px 10px;
+    margin-bottom: 8px;
+  }
+  .mp-manual-table th,
+  .mp-manual-table td {
+    border: none;
+    padding: 2px 0;
+  }
+  .mp-manual-table th {
+    background: none;
+    font-size: 12px;
+    color: var(--mp-text-sub);
+  }
+}
+
+/* ==========================================================================
+   B-3. 一覧＋詳細の 2 カラム（bonobo: others.html.erb 法令検索の <style> より）
+   ========================================================================== */
+
+.mp-contract-split {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  max-width: 1300px;
+}
+.mp-view-panel {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: 20px;
+  align-items: flex-start;
+}
+.mp-contract-list-col {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: 0;
+  padding: 30px 32px;
+}
+.mp-contract-row {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--mp-border);
+  border-radius: 0;
+  padding: 14px 32px;
+  margin: 0 -32px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-align: left;
+  width: calc(100% + 64px);
+  font-family: inherit;
+  display: block;
+}
+.mp-contract-rows .mp-contract-row:last-child {
+  border-bottom: none;
+}
+.mp-contract-row:hover {
+  background: var(--mp-bg);
+}
+.mp-contract-row.active {
+  background: var(--mp-agency-accent-l);
+}
+.mp-contract-row-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mp-contract-row-line .mp-type-tag {
+  flex-shrink: 0;
+  margin-top: 0;
+}
+.mp-contract-row-name {
+  font-weight: 500;
+  color: var(--mp-text);
+  font-size: 13px;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mp-contract-detail-col {
+  flex: 1 1 0%;
+  min-width: 0;
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: 0;
+  padding: 30px 32px;
+  position: sticky;
+  top: 58px;
+  overflow: hidden;
+}
+.mp-agent-search {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.mp-agent-search select {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--mp-text);
+  font-family: inherit;
+  background: var(--mp-surface);
+  width: 200px;
+}
+.mp-notice-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  margin-top: 8px;
+}
+.mp-page-btn {
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--mp-text);
+  cursor: pointer;
+  font-family: inherit;
+}
+.mp-page-btn:hover:not(:disabled) {
+  background: var(--mp-border);
+}
+.mp-page-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@media (min-width: 769px) {
+  .mp-contract-detail-col {
+    top: 58px;
+  }
+}
+@media (max-width: 900px) {
+  .mp-contract-split,
+  .mp-view-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .mp-contract-list-col {
+    flex: 1 1 auto;
+    width: 100%;
+    padding: 20px 16px;
+  }
+  .mp-contract-row {
+    padding: 12px 16px;
+    margin: 0 -16px;
+    width: calc(100% + 32px);
+  }
+}
+
+/* ==========================================================================
+   B-4. カテゴリタブ（bonobo: others.html.erb 帳票一覧の <style> より）
+   ========================================================================== */
+
+.mp-doc-category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mp-doc-category-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: 1px solid var(--mp-border);
+  background: var(--mp-surface);
+  color: var(--mp-text-sub);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+}
+.mp-doc-category-tab:hover {
+  background: var(--mp-bg);
+  color: var(--mp-text);
+}
+.mp-doc-category-tab.active {
+  background: var(--mp-agency-accent);
+  color: #fff;
+  border-color: var(--mp-agency-accent);
+}
+
+/* ==========================================================================
+   D-1. 一覧テーブルまわりの LegalBase 固有調整
+   ========================================================================== */
+
+/* 一覧テーブルを囲うカード。bonobo の .mp-card と同じ見た目にそろえる。 */
+.mp-list-card {
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  overflow: hidden;
+}
+.mp-list-card-hd {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--mp-border);
+}
+.mp-list-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--mp-text);
+}
+.mp-list-card-sub {
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  margin-top: 4px;
+}
+.mp-list-card-toolbar {
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--mp-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.mp-list-card-body {
+  padding: 0;
+}
+.mp-list-card .mp-doc-table-wrap {
+  border: none;
+  border-radius: 0;
+}
+
+/* クリックで詳細が開く行 */
+.mp-doc-table tbody tr.is-clickable {
+  cursor: pointer;
+}
+/* 申込済みの行を淡く塗る（bonobo の .mp-badge と同系統の配色） */
+.mp-doc-table tbody tr.is-applied {
+  background: #f5fbf8;
+}
+.mp-doc-table tbody tr.is-applied:hover {
+  background: #ecf7f2;
+}
+.mp-row-arrow {
+  color: var(--mp-text-hint);
+  text-align: right;
+  white-space: nowrap;
+}
+.mp-doc-table tbody tr:hover .mp-row-arrow {
+  color: var(--mp-agency-accent);
+}
+.mp-cell-strong {
+  font-weight: 600;
+}
+
+/* ソート可能な列見出し */
+.mp-th-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.mp-th-sortable:hover {
+  color: var(--mp-text);
+}
+.mp-sort-ic {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--mp-text-hint);
+}
+.mp-sort-ic.active {
+  color: var(--mp-agency-accent);
+}
+
+/* ダウンロード／外部リンクのボタン（bonobo の .mp-document-download-btn 相当） */
+.mp-document-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.mp-document-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--mp-text);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: inherit;
+}
+.mp-document-download-btn:hover {
+  background: var(--mp-border);
+}
+
+/* ==========================================================================
+   D-2. 詳細モーダル
+   ========================================================================== */
+
+.mp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.mp-modal {
+  position: relative;
+  background: var(--mp-surface);
+  border-radius: var(--mp-radius-lg);
+  width: 100%;
+  max-width: 660px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.mp-modal-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--mp-border);
+}
+.mp-modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--mp-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mp-modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--mp-text-hint);
+  cursor: pointer;
+  padding: 0 4px;
+  font-family: inherit;
+}
+.mp-modal-close:hover {
+  color: var(--mp-text);
+}
+.mp-modal-body {
+  padding: 8px 22px 18px;
+  overflow-y: auto;
+}
+.mp-modal-ft {
+  padding: 14px 22px;
+  border-top: 1px solid var(--mp-border);
+  text-align: right;
+}
+
+/* ==========================================================================
+   D-3. 代理店コード（募集用パラメータ付き URL）
+   bonobo: agency_code.html.erb の <style> を移植
+   ========================================================================== */
+
+.mp-agency-code-wrap {
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mp-agency-code-num {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--mp-agency-accent);
+  background: var(--mp-agency-accent-l);
+  padding: 6px 16px;
+  border-radius: var(--mp-radius);
+  margin: 0 0 14px;
+}
+.mp-agency-code-note {
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--mp-text-sub);
+}
+.mp-agency-code-note strong {
+  color: var(--mp-text);
+  font-weight: 600;
+}
+
+.mp-url-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.mp-url-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mp-text-sub);
+  margin-bottom: 6px;
+}
+.mp-url-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 12px 14px;
+}
+.mp-url-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--mp-text);
+  word-break: break-all;
+  user-select: all;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.mp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--mp-agency-accent);
+  border: 1px solid var(--mp-agency-accent);
+  border-radius: var(--mp-radius);
+  padding: 8px 18px;
+  font-size: 13px;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+.mp-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+.mp-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.mp-btn-sub {
+  background: var(--mp-bg);
+  border-color: var(--mp-border);
+  color: var(--mp-text);
+}
+.mp-btn-sub:hover:not(:disabled) {
+  background: var(--mp-border);
+  opacity: 1;
+}
+.mp-btn-done {
+  background: #0f9d6e;
+  border-color: #0f9d6e;
+}
+.mp-btn-block {
+  width: 100%;
+}
+
+.mp-url-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.mp-url-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--mp-bg);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 6px 10px;
+}
+.mp-url-filter label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mp-text-sub);
+  white-space: nowrap;
+}
+.mp-url-filter select {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  background: var(--mp-surface);
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--mp-text);
+  font-family: inherit;
+  width: 140px;
+}
+.mp-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--mp-border);
+}
+
+/* TOP のリンクカード。横長の帯ではなく、アイコン付きの正方形タイルにする */
+.mp-link-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.mp-link-card {
+  flex: 0 0 200px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius-lg);
+  padding: 20px 18px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.mp-link-card:hover {
+  border-color: var(--mp-agency-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+.mp-link-card-ic {
+  width: 40px;
+  height: 40px;
+  color: var(--mp-agency-accent);
+  flex-shrink: 0;
+}
+.mp-link-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mp-text);
+}
+.mp-link-card:hover .mp-link-card-title {
+  color: var(--mp-agency-accent);
+}
+.mp-link-card-ext {
+  flex-shrink: 0;
+  color: var(--mp-text-hint);
+}
+.mp-link-card-sub {
+  font-size: 11.5px;
+  color: var(--mp-text-sub);
+  line-height: 1.7;
+}
+
+/* QR コード（代理店コードページ：チラシ作成の下段） */
+.mp-qr-section {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--mp-border);
+}
+.mp-qr-note {
+  font-size: 12px;
+  color: var(--mp-text-sub);
+  line-height: 1.8;
+  margin: 0 0 14px;
+}
+.mp-qr-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.mp-qr-item {
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.mp-qr-img {
+  width: 130px;
+  height: 130px;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+}
+.mp-qr-label {
+  font-size: 11px;
+  color: var(--mp-text-sub);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   D-4. 料金シミュレーター
+   ========================================================================== */
+
+.mp-sim {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+  max-width: 1100px;
+}
+@media (max-width: 900px) {
+  .mp-sim {
+    grid-template-columns: 1fr;
+  }
+}
+.mp-field {
+  margin-bottom: 20px;
+}
+.mp-field:last-child {
+  margin-bottom: 0;
+}
+.mp-field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mp-text);
+  margin-bottom: 8px;
+}
+.mp-radio-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.mp-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--mp-text);
+  cursor: pointer;
+}
+.mp-radio input {
+  accent-color: var(--mp-agency-accent);
+  width: 16px;
+  height: 16px;
+}
+.mp-input {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--mp-text);
+  font-family: inherit;
+  background: var(--mp-surface);
+  width: 100%;
+}
+.mp-input:focus {
+  outline: none;
+  border-color: var(--mp-agency-accent);
+}
+.mp-input-num {
+  width: 120px;
+  text-align: right;
+}
+.mp-field-hint {
+  font-size: 11px;
+  color: var(--mp-text-hint);
+  margin-top: 6px;
+  line-height: 1.7;
+}
+.mp-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--mp-agency-accent);
+  margin-bottom: 18px;
+}
+.mp-price-val {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1;
+}
+.mp-price-unit {
+  font-size: 14px;
+  font-weight: 600;
+}
+.mp-price-note {
+  font-size: 11px;
+  color: var(--mp-text-hint);
+}
+
+/* ==========================================================================
+   D-5. 想定問答集
+   ========================================================================== */
+
+.mp-faq-sec {
+  margin-bottom: 26px;
+}
+.mp-faq-sec-hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.mp-faq-cat {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--mp-agency-accent-l);
+  color: var(--mp-agency-accent);
+}
+.mp-faq-count {
+  font-size: 11px;
+  color: var(--mp-text-hint);
+}
+.mp-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 900px;
+}
+.mp-faq-item {
+  border: 1px solid var(--mp-border);
+  border-radius: var(--mp-radius);
+  overflow: hidden;
+  background: var(--mp-surface);
+}
+.mp-faq-q {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: var(--mp-bg);
+  list-style: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mp-text);
+  line-height: 1.7;
+}
+.mp-faq-q::-webkit-details-marker {
+  display: none;
+}
+.mp-faq-q:hover {
+  background: var(--mp-border);
+}
+.mp-faq-mark {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+.mp-faq-mark-q {
+  background: var(--mp-agency-accent);
+  color: #fff;
+}
+.mp-faq-mark-a {
+  background: var(--mp-agency-accent-l);
+  color: var(--mp-agency-accent);
+}
+.mp-faq-q-text {
+  flex: 1;
+}
+.mp-faq-chevron {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--mp-text-hint);
+  margin-top: 4px;
+  transition: transform 0.15s ease;
+}
+.mp-faq-item[open] .mp-faq-chevron {
+  transform: rotate(180deg);
+}
+.mp-faq-a {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--mp-border);
+}
+.mp-faq-a-body {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--mp-text);
+}
+.mp-faq-a-body p {
+  margin: 0 0 10px;
+}
+.mp-faq-a-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   D-6. SP 表示の調整
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* カードヘッダーは、タイトルと操作を縦に積む */
+  .mp-card-hd {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  /* URL とコピーボタンを縦積みにして、URL の折り返しで潰れないようにする */
+  .mp-url-box {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .mp-url-filter select {
+    width: 100%;
+  }
+  .mp-url-filter {
+    flex: 1 1 100%;
+  }
+
+  /* 一覧カードのツールバーは折り返す */
+  .mp-list-card-toolbar {
+    padding: 12px 16px;
+  }
+  .mp-list-card-hd {
+    padding: 16px;
+  }
+
+  /* 絞り込みのプルダウンは画面幅いっぱいに */
+  .mp-agent-search {
+    width: 100%;
+  }
+  .mp-agent-search select {
+    flex: 1 1 45%;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* TOP のタイルは 2 列に。
+     flex-grow を 0 にしておかないと、最終行に 1 枚だけ余ったときに
+     そのカードが横幅いっぱいまで伸び、aspect-ratio で巨大な正方形になってしまう。 */
+  .mp-link-card {
+    flex: 0 1 calc(50% - 7px);
+    /* 幅が狭いと正方形の中に収まらず縦に伸びてしまうため、内側の余白を詰める */
+    padding: 14px 10px;
+    gap: 8px;
+  }
+
+  /* QR は 2 列に収まるよう縮める */
+  .mp-qr-item {
+    width: calc(50% - 10px);
+  }
+
+  /* 詳細モーダルは全画面に近い見た目にする */
+  .mp-modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .mp-modal {
+    max-width: none;
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+/* ==========================================================================
+   D-7. エラー表示
+   ========================================================================== */
+
+.mp-error-box {
+  background: #fae9e9;
+  border: 1px solid #f0c0c0;
+  border-radius: var(--mp-radius);
+  padding: 14px 16px;
+  font-size: 12px;
+  color: #8a2020;
+  line-height: 1.7;
+}
+.mp-error-box pre {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  background: var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  border-radius: 6px;
+  font-size: 11px;
+  overflow-x: auto;
+  color: var(--mp-text-sub);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
