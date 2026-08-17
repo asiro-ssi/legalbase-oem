@@ -20,13 +20,15 @@ export default function FormsTable({
   const [sortKey, setSortKey] = useState<SortKey>("category");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
-  // 「代理店ページ公開」が on のものだけに絞り込む。
-  // LEGIEW 版はさらに「LEGIEWのみ」= on かつ、除外キーワードを含まないタイトルだけにする。
+  // 通常版は「代理店ページ公開」= on で絞り込む。
+  // LEGIEW 版は「LEGIEWのみ」= on だけで判定し、「代理店ページ公開」は見ない
+  // （agent 側と同じ扱い。従来 OEM 側で両方見ていたのは設定不足による暫定対応だった）。
   const publishedRecords = records.filter((record) => {
-    if (fieldText(record, "代理店ページ公開").toLowerCase().trim() !== "on") return false;
-    if (!isLegiew) return true;
-    if (fieldText(record, "LEGIEWのみ").toLowerCase().trim() !== "on") return false;
-    return isLegiewRecordVisible(fieldText(record, "Title"));
+    if (isLegiew) {
+      if (fieldText(record, "LEGIEWのみ").toLowerCase().trim() !== "on") return false;
+      return isLegiewRecordVisible(fieldText(record, "Title"));
+    }
+    return fieldText(record, "代理店ページ公開").toLowerCase().trim() === "on";
   });
 
   const filteredRecords = activeFilter

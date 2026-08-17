@@ -1,5 +1,10 @@
-import { redirect } from "next/navigation";
+import { Metadata } from "next";
+import HomeScreen from "../features/HomeScreen";
 
-export default function LegiewHome() {
-  redirect("/legiew/faq");
+export const metadata: Metadata = {
+  title: "TOP | LegalBase by LEGIEW",
+};
+
+export default function Page() {
+  return <HomeScreen isLegiew />;
 }
