@@ -58,6 +58,28 @@ LEGIEW 版の差分は次のとおりです（判定は `app/lib/legiew-filter.t
 > 除外キーワード（`法務チャット` `THEMIL`）による絞り込みを持ちません。
 > 統合時は、URL で分ける方針に寄せたうえで、除外キーワードを移植するかを決める必要があります。
 
+## 検索エンジンからの除外
+
+このポータルは**ログインを伴わない公開ページ**です。
+帳票（提案資料など）や問答集が検索結果に出ないよう、2 段構えで noindex を指定しています。
+
+| 場所 | 対象 | 内容 |
+| --- | --- | --- |
+| `app/layout.tsx` の `metadata.robots` | HTML ページ | `<meta name="robots" content="noindex, nofollow, nocache">` |
+| `next.config.ts` の `headers()` | **全レスポンス** | `X-Robots-Tag: noindex, nofollow, noimageindex` |
+
+2 段にしているのは、`metadata.robots` が HTML にしか効かないためです。
+`/api/kintone-file` が返す PDF などには meta タグを埋め込めないので、
+HTTP ヘッダー側でカバーしています。
+
+> **`robots.txt` で `Disallow` にはしないでください。**
+> クロール自体を禁止すると、クローラーが上記の noindex を読めなくなり、
+> 外部リンク経由で URL だけが検索結果に登録されることがあります。
+> 「検索結果に出したくない」場合はクロールを許可したうえで noindex を返すのが正解です。
+
+なお noindex は検索結果に出さないための指定で、**アクセス制限ではありません。**
+URL を知っている人は誰でも閲覧・ダウンロードできます。
+
 ## デザインシステムの同期ルール
 
 スタイルは 3 段構成です。`app/globals.css` でこの順に読み込みます。

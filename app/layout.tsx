@@ -20,6 +20,20 @@ export const metadata: Metadata = {
     shortcut: "https://legal-base.vercel.app/img/favicon.ico",
     apple: "https://legal-base.vercel.app/img/favicon.ico",
   },
+  // このポータルはログインを伴わない公開ページなので、
+  // 帳票や問答集が検索結果に出ないよう検索エンジンから除外する。
+  // robots.txt で Disallow にはしない（クロールを禁止すると
+  // この noindex 自体が読まれず、URL だけ登録されることがある）。
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
 };
 
 export default function RootLayout({
